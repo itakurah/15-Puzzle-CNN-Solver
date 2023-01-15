@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" package="com.eml.fifteensolver">
+    <meta-data android:name="developer" android:value="Niklas Hoefflin" />
+    <queries>
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+    </queries>
+    <uses-sdk android:minSdkVersion="28" android:targetSdkVersion="32" android:maxSdkVersion="33" />
+    <!-- Without this folders will be inaccessible in Android-11 and above devices -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <!-- Without this entry storage-permission entry will not be visible under app-info permissions list Android-10 and below -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" tools:ignore="ScopedStorage" />
+    <!-- Without this entry the folders will remain in-accessible in Android-10, even if WRITE_EXTERNAL_STORAGE as above is present. -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.camera.any" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <application
+            android:requestLegacyExternalStorage="true" android:allowBackup="true" android:dataExtractionRules="@xml/data_extraction_rules" android:fullBackupContent="@xml/backup_rules" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/Theme.FifteenSolver" tools:targetApi="31">
+        <provider android:name="androidx.core.content.FileProvider" android:authorities="com.eml.android.fileprovider" android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+        </provider>
+        <activity android:name=".ImageProcessActivity"
+                  android:theme="@style/Theme.FifteenSolver.NoActionBar"
+                  android:screenOrientation="portrait"
+                  android:configChanges="orientation|keyboardHidden"
+        />
+        <activity android:name=".MainActivity" android:exported="true" android:theme="@style/Theme.FifteenSolver.NoActionBar"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

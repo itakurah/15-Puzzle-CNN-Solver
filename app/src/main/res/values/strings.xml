@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">FifteenSolver</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="box1">Welcome to the 15-Puzzle Solver</string>
+    <string name="box2">This application can detect and solve a 15-Puzzle using a convolutional neural network and an informed search algorithm called IDA*. \nTo solve a 15-Puzzle you need to pick an image from your gallery or take one with the camera.
+        \nIf the puzzle was recognized, you can adjust it in the next step if not all digits were recognized correctly.
+    </string>
+    <string name="box3">Pick image from Gallery or Camera</string>
+    <string name="button1">Select Image</string>
+    <string name="box4">ABOUT</string>
+    <string name="select_image_from_gallery">Select image from gallery</string>
+    <string name="dialog_title">Pick an option</string>
+    <string name="take_picture">take picture</string>
+    <string name="previewView">take picture</string>
+    <string name="button">D</string>
+    <string name="solve">Solve</string>
+    <string name="labelmodel">Predicted state from model:</string>
+    <string name="abort">Abort</string>
+    <string name="labelmodeldigits">labelModeldigits</string>
+    <string name="labelparsed">Parsed state:</string>
+    <string name="labelparseddigits">labelParsedDigits</string>
+    <string name="image">image</string>
+    <string name="solution"></string>
+    <string name="solutionlabel">Solution:</string>
+
+    <string name="_02">00</string>
+    <string name="_01">00</string>
+    <string name="_06">00</string>
+    <string name="_10">00</string>
+    <string name="label">Click on a digit to change it</string>
+    <string name="_03">00</string>
+    <string name="_00">00</string>
+    <string name="_08">00</string>
+    <string name="_04">00</string>
+    <string name="_05">00</string>
+    <string name="_07">00</string>
+    <string name="_09">00</string>
+    <string name="_11">00</string>
+    <string name="_12">00</string>
+    <string name="_13">00</string>
+    <string name="_14">00</string>
+    <string name="_15">00</string>
+    <string name="depth">Depth:</string>
+    <string name="depthlabel"></string>
+    <string name="app_version">APP_VERSION</string>
+    <string name="icon_by_prosymbols_modifed">Icon by ProSymbols (modified)</string>
+
+
+</resources>

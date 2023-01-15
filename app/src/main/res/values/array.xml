@@ -1,0 +1,6 @@
+<resources>
+<string-array name="options">
+        <item>From Gallery</item>
+        <item>From Camera</item>
+</string-array>
+</resources>
