@@ -12,6 +12,11 @@ This software project is implemented as an Android application written in Java a
 3. Modify incorrectly recognized digits
 4. Solve the puzzle
 
+Example image:
+<div style="display:flex; justify-content:center;">
+  <img src="https://github.com/itakurah/HAW-EML-15-Puzzle-CNN-Solver/blob/main/puzzle.jpg" alt="Image" style="width:20%; height:auto;">
+</div>
+
 ## Build
 When building the application you need to create a file called `local.properties` in the root folder containing the path of the installed SDK:
 e.g.: `C:\\Users\\USERNAME\\AppData\\Local\\Android\\sdk`
