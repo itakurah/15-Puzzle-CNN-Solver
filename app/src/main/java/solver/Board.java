@@ -1,6 +1,5 @@
 package solver;
 
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,16 +8,16 @@ import java.util.Arrays;
  * Class for representing the puzzle board
  */
 public class Board {
-    private final int COLUMN = 4;
-    private final int ROW = 4;
-    private int[][] state;
+    public static final int[][] goal = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 0}};
+    public static final int BOARD_LENGTH = 4;
+    private static Heuristic heuristic;
+    private final int[][] state;
     private int fScore;
     private int gScore = 0;
     private int hScore;
     private int[] blankTile;
     private Board parent;
     private String move;
-    private HeuristicType heuristicType;
     private ArrayList<Board> successors = new ArrayList<>();
 
     /**
@@ -37,9 +36,9 @@ public class Board {
      * @param board Board to create a copy from
      */
     public Board(Board board) {
-        this.gScore = board.getgScore() + 1;
+        this.gScore = board.getGScore() + 1;
         this.state = copyState(board);
-        this.heuristicType = board.getType();
+        heuristic = board.getHeuristic();
         this.parent = board;
     }
 
@@ -50,11 +49,11 @@ public class Board {
      * @return Copied array of parent board
      */
     public static int[][] copyState(Board board) {
-        int[][] copy = new int[board.getState().length][];
-        for (int i = 0; i < board.getROW(); i++) {
-            copy[i] = Arrays.copyOf(board.getState()[i], board.getState().length);
-        }
-        return copy;
+//        int[][] copy = new int[board.getState().length][];
+//        for (int i = 0; i < board.getROW(); i++) {
+//            copy[i] = Arrays.copyOf(board.getState()[i], board.getState().length);
+//        }
+        return Arrays.stream(board.getState()).map(int[]::clone).toArray(int[][]::new);//faster method due to Java stream Api;
     }
 
     /**
@@ -66,6 +65,14 @@ public class Board {
         return parent;
     }
 
+    /**
+     * Set parent of current board
+     *
+     * @param parent Parent from given board
+     */
+    public void setParent(Board parent) {
+        this.parent = parent;
+    }
 
     /**
      * Get successors of current board
@@ -92,14 +99,14 @@ public class Board {
      * @return 2d array with x on first and y on second index
      */
     public int[] getCoordinates(int number) {
-        for (int i = 0; i < ROW; i++) {
-            for (int j = 0; j < COLUMN; j++) {
+        for (int i = 0; i < BOARD_LENGTH; i++) {
+            for (int j = 0; j < BOARD_LENGTH; j++) {
                 if (this.state[i][j] == number) {
                     return new int[]{i, j};
                 }
             }
         }
-        throw new IllegalArgumentException("Couldn't find number in board");
+        throw new IllegalArgumentException("Number could not be found on the board");
     }
 
     /**
@@ -124,14 +131,13 @@ public class Board {
         int y = this.getBlankTile()[1];
         if (y < 3) {
             Board moveBoardRight = new Board(this);
-            //moveBoardRight.printBoard();
             moveBoardRight.getState()[x][y] = moveBoardRight.getState()[x][y + 1];
             moveBoardRight.getState()[x][y + 1] = 0;
             moveBoardRight.setBlankTile(copyBlankTile(this));
             moveBoardRight.setBlankTile(x, y + 1);
             moveBoardRight.setMove("R");
-            moveBoardRight.sethScore(HeuristicSelection.getHeuristicScore(moveBoardRight, this.heuristicType));
-            moveBoardRight.setfScore(moveBoardRight.getgScore() + moveBoardRight.gethScore());
+            moveBoardRight.setHScore(heuristic.calculate(moveBoardRight));
+            moveBoardRight.setFScore(moveBoardRight.getGScore() + moveBoardRight.getHScore());
             successors.add(moveBoardRight);
         }
         if (y > 0) {
@@ -141,8 +147,8 @@ public class Board {
             moveBoardLeft.setBlankTile(copyBlankTile(this));
             moveBoardLeft.setBlankTile(x, y - 1);
             moveBoardLeft.setMove("L");
-            moveBoardLeft.sethScore(HeuristicSelection.getHeuristicScore(moveBoardLeft, this.heuristicType));
-            moveBoardLeft.setfScore(moveBoardLeft.getgScore() + moveBoardLeft.gethScore());
+            moveBoardLeft.setHScore(heuristic.calculate(moveBoardLeft));
+            moveBoardLeft.setFScore(moveBoardLeft.getGScore() + moveBoardLeft.getHScore());
             successors.add(moveBoardLeft);
         }
         if (x > 0) {
@@ -152,8 +158,8 @@ public class Board {
             moveBoardUp.setBlankTile(copyBlankTile(this));
             moveBoardUp.setBlankTile(x - 1, y);
             moveBoardUp.setMove("U");
-            moveBoardUp.sethScore(HeuristicSelection.getHeuristicScore(moveBoardUp, this.heuristicType));
-            moveBoardUp.setfScore(moveBoardUp.getgScore() + moveBoardUp.gethScore());
+            moveBoardUp.setHScore(heuristic.calculate(moveBoardUp));
+            moveBoardUp.setFScore(moveBoardUp.getGScore() + moveBoardUp.getHScore());
             successors.add(moveBoardUp);
         }
         if (x < 3) {
@@ -163,8 +169,8 @@ public class Board {
             moveBoardDown.setBlankTile(copyBlankTile(this));
             moveBoardDown.setBlankTile(x + 1, y);
             moveBoardDown.setMove("D");
-            moveBoardDown.sethScore(HeuristicSelection.getHeuristicScore(moveBoardDown, this.heuristicType));
-            moveBoardDown.setfScore(moveBoardDown.getgScore() + moveBoardDown.gethScore());
+            moveBoardDown.setHScore(heuristic.calculate(moveBoardDown));
+            moveBoardDown.setFScore(moveBoardDown.getGScore() + moveBoardDown.getHScore());
             successors.add(moveBoardDown);
         }
         return successors;
@@ -173,14 +179,25 @@ public class Board {
     /**
      * Prints the current board as a 4 by 4 matrix
      */
-    public void printBoard() {
-        for (int i = 0; i < ROW; i++) {
-            for (int j = 0; j < COLUMN; j++) {
-                System.out.printf("%4d", this.getState()[i][j]);
-            }
-            System.out.println();
-        }
-        System.out.println("--------------");
+    public void show() {
+        System.out.println("+-----+-----+-----+-----+\n" +
+                "| " + formatCell(this.getState()[0][0]) + " | " + formatCell(this.getState()[0][1]) + " | " + formatCell(this.getState()[0][2]) + " | " + formatCell(this.getState()[0][3]) + " |\n" +
+                "+-----+-----+-----+-----+\n" +
+                "| " + formatCell(this.getState()[1][0]) + " | " + formatCell(this.getState()[1][1]) + " | " + formatCell(this.getState()[1][2]) + " | " + formatCell(this.getState()[1][3]) + " |\n" +
+                "+-----+-----+-----+-----+\n" +
+                "| " + formatCell(this.getState()[2][0]) + " | " + formatCell(this.getState()[2][1]) + " | " + formatCell(this.getState()[2][2]) + " | " + formatCell(this.getState()[2][3]) + " |\n" +
+                "+-----+-----+-----+-----+\n" +
+                "| " + formatCell(this.getState()[3][0]) + " | " + formatCell(this.getState()[3][1]) + " | " + formatCell(this.getState()[3][2]) + " | " + formatCell(this.getState()[3][3]) + " |\n" +
+                "+-----+-----+-----+-----+\n");
+    }
+
+    /**
+     * Formats the cells in the grid
+     * @param value
+     * @return
+     */
+    private String formatCell(int value) {
+        return (value == 0) ? "   " : ((value < 10) ? " " + value + " " : value + " ");
     }
 
     /**
@@ -188,7 +205,6 @@ public class Board {
      *
      * @return Board object details
      */
-    @NonNull
     @Override
     public String toString() {
         return "Board{" +
@@ -196,8 +212,8 @@ public class Board {
                 ", fScore=" + fScore +
                 ", gScore=" + gScore +
                 ", hScore=" + hScore +
-                ", COLUMN=" + COLUMN +
-                ", ROW=" + ROW +
+                ", COLUMN=" + BOARD_LENGTH +
+                ", ROW=" + BOARD_LENGTH +
                 '}';
     }
 
@@ -210,13 +226,21 @@ public class Board {
         return state;
     }
 
+    /**
+     * Get current f score
+     *
+     * @return F score
+     */
+    public int getFScore() {
+        return fScore;
+    }
 
     /**
      * Set f score
      *
      * @param fScore F score
      */
-    public void setfScore(int fScore) {
+    public void setFScore(int fScore) {
         this.fScore = fScore;
     }
 
@@ -225,17 +249,25 @@ public class Board {
      *
      * @return G score
      */
-    public int getgScore() {
+    public int getGScore() {
         return gScore;
     }
 
+    /**
+     * Set g score
+     *
+     * @param gScore G score
+     */
+    public void setGScore(int gScore) {
+        this.gScore = gScore;
+    }
 
     /**
      * Get current h score
      *
      * @return H score
      */
-    public int gethScore() {
+    public int getHScore() {
         return hScore;
     }
 
@@ -244,7 +276,7 @@ public class Board {
      *
      * @param hScore H score
      */
-    public void sethScore(int hScore) {
+    public void setHScore(int hScore) {
         this.hScore = hScore;
     }
 
@@ -267,40 +299,21 @@ public class Board {
     }
 
     /**
-     * Get column size
-     *
-     * @return Column size
-     */
-    public int getCOLUMN() {
-        return COLUMN;
-    }
-
-    /**
-     * Get row size
-     *
-     * @return Row size
-     */
-    public int getROW() {
-        return ROW;
-    }
-
-
-    /**
      * Get heuristic type
      *
      * @return Heuristic type
      */
-    public HeuristicType getType() {
-        return heuristicType;
+    public Heuristic getHeuristic() {
+        return heuristic;
     }
 
     /**
      * Set heuristic type
      *
-     * @param type Type of heuristic
+     * @param heuristic Type of heuristic
      */
-    public void setType(HeuristicType type) {
-        this.heuristicType = type;
+    public void setHeuristic(Heuristic heuristic) {
+        Board.heuristic = heuristic;
     }
 
     /**
@@ -330,6 +343,10 @@ public class Board {
     public void setBlankTile(int x, int y) {
         this.blankTile[0] = x;
         this.blankTile[1] = y;
+    }
+
+    public boolean isSolution() {
+        return this.equals(new Board(goal));
     }
 
     /**

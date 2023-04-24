@@ -174,22 +174,23 @@ public class ImageProcessActivity extends AppCompatActivity {
 
     private void solve(List<String> digits) {
         int[][] gameState = new int[][]{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}};
-
+        StringBuilder puzzle = new StringBuilder();
         int count = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 gameState[i][j] = Integer.parseInt(digits.get(count));
+                puzzle.append(" "+Integer.parseInt(digits.get(count)));
                 count++;
             }
         }
         Board board = new Board(gameState);
-        board.printBoard();
         try {
-            Result result = IDAStar.solve(board, HeuristicType.LCMD, TimeUnit.NS, DebugMode.ON);
+            System.out.println(puzzle);
+            Result result = IDAStar.solve(board, new LinearConflictWithMD(), TimeUnit.NS, DebugMode.ON);
             solution.setText(result.getMoves());
             depth.setText(String.valueOf(result.getDepth()));
         } catch (Exception e) {
-            solution.setText("Puzzle is invalid!");
+            solution.setText(e.getMessage());
             depth.setText("");
             Toast.makeText(getApplicationContext(), "Puzzle is invalid!", Toast.LENGTH_LONG).show();
         }
