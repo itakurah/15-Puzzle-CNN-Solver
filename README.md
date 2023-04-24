@@ -1,7 +1,7 @@
 # HAW-EML 15-Puzzle-CNN-Solver
 <div style="display:flex; justify-content:center;">
-  <img src="https://github.com/itakurah/HAW-EML-15-Puzzle-CNN-Solver/blob/main/app1.jpg" alt="Image" style="max-width:50%; height:auto;">
-  <img src="https://github.com/itakurah/HAW-EML-15-Puzzle-CNN-Solver/blob/main/app2.jpg" alt="Image" style="max-width:50%; height:auto;">
+  <img src="https://github.com/itakurah/HAW-EML-15-Puzzle-CNN-Solver/blob/main/app1.jpg" alt="Image" style="max-width:20%; height:auto;">
+  <img src="https://github.com/itakurah/HAW-EML-15-Puzzle-CNN-Solver/blob/main/app2.jpg" alt="Image" style="max-width:20%; height:auto;">
 </div>
 
 
