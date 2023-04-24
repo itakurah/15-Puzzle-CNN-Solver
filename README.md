@@ -4,6 +4,7 @@
   <img src="https://github.com/itakurah/HAW-EML-15-Puzzle-CNN-Solver/blob/main/app2.jpg" alt="Image" style="width:30%; height:auto;">
 </div>
 
+
 This software project is implemented as an Android application written in Java and is focused on solving the 15-Puzzle game by first detecting the puzzle grid on an image using OpenCV. The digits within the grid are then extracted and classified using a convolutional neural network (CNN) that is pre-trained on the [MNIST](http://yann.lecun.com/exdb/mnist/) dataset. Once the digits have been classified, the puzzle is then solved using an informed search algorithm called IDA*. The use of OpenCV allows for efficient image processing and digit extraction while the CNN provides accurate digit classification. The IDA* algorithm, along with the linear-conflict heuristic, is used to determine the cost of each move and guide the search for the optimal solution.
 ## Usage
 1. Select an image from your gallery or camera app
