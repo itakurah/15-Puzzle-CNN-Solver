@@ -1,12 +1,13 @@
 package solver;
 
+
 /**
  * Class for the result objects to better handle tests and comparison between algorithms and heuristics
  */
 public class Result {
     private final Board finalBoard;
     private final String algorithmType;
-    private final HeuristicType heuristicType;
+    private final Heuristic heuristic;
     private final int totalExpandedBoards;
     private final int totalOpenListSize;
     private final int totalClosedListSize;
@@ -14,11 +15,11 @@ public class Result {
     private final long totalRunTime;
     private final String movesToSolve;
 
-    public Result(Board finalBoard, String algorithmType, HeuristicType heuristicType, int totalExpandedBoards,
+    public Result(Board finalBoard, String algorithmType, Heuristic heuristic, int totalExpandedBoards,
                   int totalOpenListSize, int totalClosedListSize, long totalMemoryUsed, long totalRunTime, String movesToSolve) {
         this.finalBoard = finalBoard;
         this.algorithmType = algorithmType;
-        this.heuristicType = heuristicType;
+        this.heuristic = heuristic;
         this.totalOpenListSize = totalOpenListSize;
         this.totalClosedListSize = totalClosedListSize;
         this.totalExpandedBoards = totalExpandedBoards;
@@ -35,8 +36,8 @@ public class Result {
         return algorithmType;
     }
 
-    public HeuristicType getType() {
-        return heuristicType;
+    public String getName() {
+        return heuristic.getName();
     }
 
     public int getExpandedBoards() {
@@ -44,7 +45,7 @@ public class Result {
     }
 
     public int getDepth() {
-        return finalBoard.getgScore();
+        return finalBoard.getGScore();
     }
 
     public long getMemoryUsed() {
