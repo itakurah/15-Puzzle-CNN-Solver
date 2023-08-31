@@ -14,7 +14,7 @@ This software project is implemented as an Android application written in Java a
 
 Example image:
 <div style="display:flex; justify-content:center;">
-  <img src="https://github.com/itakurah/HAW-EML-15-Puzzle-CNN-Solver/blob/main/puzzle.jpg" alt="Image" style="width:40%; height:auto;">
+  <img src="https://github.com/itakurah/HAW-EML-15-Puzzle-CNN-Solver/blob/main/puzzle.jpg" alt="Image" style="width:20%; height:auto;">
 </div>
 
 ## Build
