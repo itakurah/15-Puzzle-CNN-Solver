@@ -22,6 +22,9 @@ Example image:
 <div style="display:flex; justify-content:center;">
   <img src="https://github.com/itakurah/HAW-EML-15-Puzzle-CNN-Solver/blob/main/process.jpg" alt="Image" style="width:60%; height:auto;">
 </div>
+
+*Note: Grayscale, Gaussian blur, Adaptive threshold filter Images have been omitted as otherwise the overview of the process would be lost.*
+
 ## Build
 When building the application you need to create a file called `local.properties` in the root folder containing the path of the installed SDK:
 e.g.: `C:\\Users\\USERNAME\\AppData\\Local\\Android\\sdk`
